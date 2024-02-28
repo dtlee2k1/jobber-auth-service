@@ -39,4 +39,5 @@ class Config {
   }
 }
 
-export const envConfig = new Config();
+const envConfig = new Config();
+export default envConfig;
