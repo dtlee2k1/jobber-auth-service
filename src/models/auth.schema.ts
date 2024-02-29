@@ -66,6 +66,10 @@ const AuthModel: ModelDefined<IAuthDocument, UserCreationAttributes> = sequelize
       {
         unique: true,
         fields: ['email']
+      },
+      {
+        unique: true,
+        fields: ['emailVerificationToken']
       }
     ]
   }
