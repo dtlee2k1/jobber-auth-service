@@ -7,12 +7,16 @@ import helmet from 'helmet';
 import cors from 'cors';
 import { verify } from 'jsonwebtoken';
 import compression from 'compression';
+import { Channel } from 'amqplib';
 
 import envConfig from './config';
 import { checkConnection } from './elasticsearch';
+import { createConnection } from './queues/connection';
 
 const SERVER_PORT = 4002;
 const logger = winstonLogger(`${envConfig.ELASTIC_SEARCH_URL}`, 'authServer', 'debug');
+
+export let authChannel: Channel;
 
 export function start(app: Application) {
   securityMiddleware(app);
@@ -58,7 +62,9 @@ function routesMiddleware(app: Application) {
   });
 }
 
-async function startQueues() {}
+async function startQueues() {
+  authChannel = (await createConnection()) as Channel;
+}
 
 async function startElasticSearch() {
   await checkConnection();
