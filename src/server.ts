@@ -53,7 +53,9 @@ function standardMiddleware(app: Application) {
 }
 
 function routesMiddleware(app: Application) {
-  app.use();
+  app.use(() => {
+    console.log(1);
+  });
 }
 
 async function startQueues() {}
