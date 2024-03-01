@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dtlee2k1/jobber-shared": "^0.0.2",
+    "@dtlee2k1/jobber-shared": "^0.0.3",
     "@elastic/elasticsearch": "^8.12.2",
     "amqplib": "^0.10.3",
     "bcrypt": "^5.1.1",
@@ -39,6 +39,7 @@
     "sequelize": "^6.37.1",
     "typescript": "^5.3.3",
     "typescript-transform-paths": "^3.4.7",
+    "uuid": "^9.0.1",
     "winston": "^3.11.0"
   },
   "devDependencies": {
@@ -51,6 +52,7 @@
     "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/lodash": "^4.14.202",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
     "eslint": "^8.57.0",

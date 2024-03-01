@@ -50,11 +50,11 @@ const AuthModel: ModelDefined<IAuthDocument, UserCreationAttributes> = sequelize
     passwordResetExpires: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: new Date()
+      defaultValue: DataTypes.NOW
     },
     createdAt: {
       type: DataTypes.DATE,
-      defaultValue: Date.now()
+      defaultValue: DataTypes.NOW
     }
   },
   {

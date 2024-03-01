@@ -31,18 +31,18 @@ export async function createAuthUser(data: IAuthDocument) {
 }
 
 export async function findUserById(authId: string) {
-  const user: Model<IAuthDocument> = (await AuthModel.findOne({
+  const user: Model<IAuthDocument> | null = (await AuthModel.findOne({
     where: { id: authId },
     attributes: {
       exclude: ['password']
     }
   })) as Model<IAuthDocument>;
 
-  return user.dataValues;
+  return user?.dataValues;
 }
 
 export async function findUserByUsernameOrEmail(username: string, email: string) {
-  const user: Model<IAuthDocument> = (await AuthModel.findOne({
+  const user: Model<IAuthDocument> | null = await AuthModel.findOne({
     where: {
       [Op.or]: [
         {
@@ -51,46 +51,46 @@ export async function findUserByUsernameOrEmail(username: string, email: string)
         { email: email.toLowerCase() }
       ]
     }
-  })) as Model<IAuthDocument>;
+  });
 
-  return user.dataValues;
+  return user?.dataValues;
 }
 
 export async function findUserByUsername(username: string) {
-  const user: Model<IAuthDocument> = (await AuthModel.findOne({
+  const user: Model<IAuthDocument> | null = await AuthModel.findOne({
     where: {
       username: firstLetterUppercase(username)
     }
-  })) as Model<IAuthDocument>;
+  });
 
-  return user.dataValues;
+  return user?.dataValues;
 }
 
 export async function findUserByEmail(email: string) {
-  const user: Model<IAuthDocument> = (await AuthModel.findOne({
+  const user: Model<IAuthDocument> | null = await AuthModel.findOne({
     where: {
       email: email.toLowerCase()
     }
-  })) as Model<IAuthDocument>;
+  });
 
-  return user.dataValues;
+  return user?.dataValues;
 }
 
 export async function findAuthUserByVerificationToken(token: string) {
-  const user: Model<IAuthDocument> = (await AuthModel.findOne({
+  const user: Model<IAuthDocument> | null = await AuthModel.findOne({
     where: {
       emailVerificationToken: token
     },
     attributes: {
       exclude: ['password']
     }
-  })) as Model<IAuthDocument>;
+  });
 
-  return user.dataValues;
+  return user?.dataValues;
 }
 
 export async function findAuthUserByPasswordToken(token: string) {
-  const user: Model<IAuthDocument> = (await AuthModel.findOne({
+  const user: Model<IAuthDocument> | null = await AuthModel.findOne({
     where: {
       [Op.and]: [
         {
@@ -99,9 +99,9 @@ export async function findAuthUserByPasswordToken(token: string) {
         { passwordResetExpires: { [Op.gt]: new Date() } }
       ]
     }
-  })) as Model<IAuthDocument>;
+  });
 
-  return user.dataValues;
+  return user?.dataValues;
 }
 
 export async function updateVerifyEmailField(authId: number, emailVerified: number, emailVerificationToken: string) {

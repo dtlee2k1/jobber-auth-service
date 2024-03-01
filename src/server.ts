@@ -1,6 +1,6 @@
 import http from 'http';
 
-import { CustomError, IAuthPayload, IErrorResponse, winstonLogger } from '@dtlee2k1/jobber-shared';
+import { CustomError, IAuthPayload, IErrorResponse, verifyGatewayRequest, winstonLogger } from '@dtlee2k1/jobber-shared';
 import { Application, NextFunction, Request, Response, json, urlencoded } from 'express';
 import hpp from 'hpp';
 import helmet from 'helmet';
@@ -12,6 +12,7 @@ import { Channel } from 'amqplib';
 import envConfig from './config';
 import { checkConnection } from './elasticsearch';
 import { createConnection } from './queues/connection';
+import authRouter from './routes/auth.routes';
 
 const SERVER_PORT = 4002;
 const logger = winstonLogger(`${envConfig.ELASTIC_SEARCH_URL}`, 'authServer', 'debug');
@@ -57,9 +58,8 @@ function standardMiddleware(app: Application) {
 }
 
 function routesMiddleware(app: Application) {
-  app.use(() => {
-    console.log(1);
-  });
+  const BASE_PATH = '/api/v1/auth';
+  app.use(BASE_PATH, verifyGatewayRequest, authRouter);
 }
 
 async function startQueues() {
