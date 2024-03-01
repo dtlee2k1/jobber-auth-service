@@ -1,7 +1,9 @@
+import envConfig from '@auth/config';
 import AuthModel from '@auth/models/auth.schema';
 import { publishDirectMessage } from '@auth/queues/auth.producer';
 import { authChannel } from '@auth/server';
 import { IAuthBuyerMessageDetails, IAuthDocument, firstLetterUppercase } from '@dtlee2k1/jobber-shared';
+import { sign } from 'jsonwebtoken';
 import { omit } from 'lodash';
 import { Model, Op } from 'sequelize';
 
@@ -41,7 +43,14 @@ export async function findUserById(authId: string) {
 
 export async function findUserByUsernameOrEmail(username: string, email: string) {
   const user: Model<IAuthDocument> = (await AuthModel.findOne({
-    where: { [Op.or]: [{ username: firstLetterUppercase(username) }, { email: email.toLowerCase() }] }
+    where: {
+      [Op.or]: [
+        {
+          username: firstLetterUppercase(username)
+        },
+        { email: email.toLowerCase() }
+      ]
+    }
   })) as Model<IAuthDocument>;
 
   return user.dataValues;
@@ -49,7 +58,9 @@ export async function findUserByUsernameOrEmail(username: string, email: string)
 
 export async function findUserByUsername(username: string) {
   const user: Model<IAuthDocument> = (await AuthModel.findOne({
-    where: { username: firstLetterUppercase(username) }
+    where: {
+      username: firstLetterUppercase(username)
+    }
   })) as Model<IAuthDocument>;
 
   return user.dataValues;
@@ -57,7 +68,9 @@ export async function findUserByUsername(username: string) {
 
 export async function findUserByEmail(email: string) {
   const user: Model<IAuthDocument> = (await AuthModel.findOne({
-    where: { email: email.toLowerCase() }
+    where: {
+      email: email.toLowerCase()
+    }
   })) as Model<IAuthDocument>;
 
   return user.dataValues;
@@ -65,7 +78,9 @@ export async function findUserByEmail(email: string) {
 
 export async function findAuthUserByVerificationToken(token: string) {
   const user: Model<IAuthDocument> = (await AuthModel.findOne({
-    where: { emailVerificationToken: token },
+    where: {
+      emailVerificationToken: token
+    },
     attributes: {
       exclude: ['password']
     }
@@ -76,8 +91,47 @@ export async function findAuthUserByVerificationToken(token: string) {
 
 export async function findAuthUserByPasswordToken(token: string) {
   const user: Model<IAuthDocument> = (await AuthModel.findOne({
-    where: { [Op.and]: [{ passwordResetToken: token }, { passwordResetExpires: { [Op.gt]: new Date() } }] }
+    where: {
+      [Op.and]: [
+        {
+          passwordResetToken: token
+        },
+        { passwordResetExpires: { [Op.gt]: new Date() } }
+      ]
+    }
   })) as Model<IAuthDocument>;
 
   return user.dataValues;
+}
+
+export async function updateVerifyEmailField(authId: number, emailVerified: number, emailVerificationToken: string) {
+  await AuthModel.update(
+    {
+      emailVerified,
+      emailVerificationToken
+    },
+    { where: { id: authId } }
+  );
+}
+
+export async function updatePassword(authId: number, password: string) {
+  await AuthModel.update(
+    {
+      password,
+      passwordResetToken: '',
+      passwordResetExpires: new Date()
+    },
+    { where: { id: authId } }
+  );
+}
+
+export function signToken(id: number, email: string, username: string) {
+  sign(
+    {
+      id,
+      email,
+      username
+    },
+    envConfig.JWT_TOKEN!
+  );
 }
