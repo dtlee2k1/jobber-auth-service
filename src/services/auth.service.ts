@@ -30,7 +30,7 @@ export async function createAuthUser(data: IAuthDocument) {
   return userData;
 }
 
-export async function findUserById(authId: string) {
+export async function findAuthUserById(authId: number) {
   const user: Model<IAuthDocument> | null = (await AuthModel.findOne({
     where: { id: authId },
     attributes: {
