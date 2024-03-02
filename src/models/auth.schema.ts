@@ -80,8 +80,8 @@ AuthModel.beforeCreate(async (auth: Model<IAuthDocument, UserCreationAttributes>
   auth.dataValues.password = hashedPassword;
 });
 
-AuthModel.prototype.comparePassword = async function (password: string) {
-  return await compare(password, this.password);
+AuthModel.prototype.comparePassword = async function (password: string, hashedPassword: string) {
+  return await compare(password, hashedPassword);
 };
 
 export default AuthModel;

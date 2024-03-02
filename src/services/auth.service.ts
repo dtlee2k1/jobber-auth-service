@@ -126,7 +126,7 @@ export async function updatePassword(authId: number, password: string) {
 }
 
 export function signToken(id: number, email: string, username: string) {
-  sign(
+  return sign(
     {
       id,
       email,
