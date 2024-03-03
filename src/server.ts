@@ -13,6 +13,7 @@ import envConfig from './config';
 import { checkConnection } from './elasticsearch';
 import { createConnection } from './queues/connection';
 import authRouter from './routes/auth.routes';
+import currentUserRouter from './routes/current-user.routes';
 
 const SERVER_PORT = 4002;
 const logger = winstonLogger(`${envConfig.ELASTIC_SEARCH_URL}`, 'authServer', 'debug');
@@ -60,6 +61,7 @@ function standardMiddleware(app: Application) {
 function routesMiddleware(app: Application) {
   const BASE_PATH = '/api/v1/auth';
   app.use(BASE_PATH, verifyGatewayRequest, authRouter);
+  app.use(BASE_PATH, verifyGatewayRequest, currentUserRouter);
 }
 
 async function startQueues() {

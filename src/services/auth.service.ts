@@ -31,12 +31,12 @@ export async function createAuthUser(data: IAuthDocument) {
 }
 
 export async function findAuthUserById(authId: number) {
-  const user: Model<IAuthDocument> | null = (await AuthModel.findOne({
+  const user: Model<IAuthDocument> | null = await AuthModel.findOne({
     where: { id: authId },
     attributes: {
       exclude: ['password']
     }
-  })) as Model<IAuthDocument>;
+  });
 
   return user?.dataValues;
 }

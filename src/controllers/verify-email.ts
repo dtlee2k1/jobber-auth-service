@@ -13,7 +13,7 @@ export async function updateVerifyToken(req: Request, res: Response, _next: Next
   // Verify user
   await updateVerifyEmailField(existingUser.id!, 1, '');
 
-  const updatedUser: IAuthDocument = await findAuthUserById(existingUser.id!);
+  const updatedUser: IAuthDocument = (await findAuthUserById(existingUser.id!)) as IAuthDocument;
   res.status(StatusCodes.OK).json({
     message: 'Email verified successfully',
     user: updatedUser
