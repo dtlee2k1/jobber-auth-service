@@ -114,6 +114,16 @@ export async function updateVerifyEmailField(authId: number, emailVerified: numb
   );
 }
 
+export async function updatePasswordResetToken(authId: number, token: string, tokenExpiration: Date) {
+  await AuthModel.update(
+    {
+      passwordResetToken: token,
+      passwordResetExpires: tokenExpiration
+    },
+    { where: { id: authId } }
+  );
+}
+
 export async function updatePassword(authId: number, password: string) {
   await AuthModel.update(
     {
