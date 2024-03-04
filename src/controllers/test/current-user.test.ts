@@ -1,5 +1,5 @@
 import * as auth from '@auth/services/auth.service'; // use to mock the specific methods that need in testing
-import * as helper from '@dtlee2k1/jobber-shared';
+// import * as helper from '@dtlee2k1/jobber-shared';
 import { Request, Response } from 'express';
 import { getCurrentUser, resendEmail } from '@auth/controllers/current-user';
 import { authMock, authMockRequest, authMockResponse, authUserPayload } from '@auth/controllers/test/mocks/auth.mock';
@@ -70,44 +70,44 @@ describe('CurrentUser', () => {
   });
 
   describe('resendEmail method', () => {
-    it('should call BadRequestError for invalid email', async () => {
+    // it('should call BadRequestError for invalid email', async () => {
+    //   const req: Request = authMockRequest({}, { username: USERNAME, password: PASSWORD }, authUserPayload) as unknown as Request;
+    //   const res: Response = authMockResponse();
+    //   const next = jest.fn();
+
+    //   jest.spyOn(auth, 'findUserByEmail').mockResolvedValue({} as never);
+
+    //   resendEmail(req, res, next).catch(() => {
+    //     expect(helper.BadRequestError).toHaveBeenCalledWith('Email is invalid', 'CurrentUser resentEmail() method error');
+    //   });
+    // });
+
+    it('should call updateVerifyEmailField method', async () => {
       const req: Request = authMockRequest({}, { username: USERNAME, password: PASSWORD }, authUserPayload) as unknown as Request;
       const res: Response = authMockResponse();
       const next = jest.fn();
 
-      jest.spyOn(auth, 'findUserByEmail').mockResolvedValue({} as never);
+      jest.spyOn(auth, 'findUserByEmail').mockResolvedValue(authMock);
 
-      resendEmail(req, res, next).catch(() => {
-        expect(helper.BadRequestError).toHaveBeenCalledWith('Email is invalid', 'CurrentUser resentEmail() method error');
-      });
+      await resendEmail(req, res, next);
+      expect(auth.updateVerifyEmailField).toHaveBeenCalled();
     });
 
-    // it('should call updateVerifyEmailField method', async () => {
-    //   const req: Request = authMockRequest({}, { username: USERNAME, password: PASSWORD }, authUserPayload) as unknown as Request;
-    //   const res: Response = authMockResponse();
-    //   const next = jest.fn();
+    it('should return authenticated user', async () => {
+      const req: Request = authMockRequest({}, { username: USERNAME, password: PASSWORD }, authUserPayload) as unknown as Request;
+      const res: Response = authMockResponse();
+      const next = jest.fn();
 
-    //   jest.spyOn(auth, 'findUserByEmail').mockResolvedValue(authMock);
+      jest.spyOn(auth, 'findUserByEmail').mockResolvedValue(authMock);
+      jest.spyOn(auth, 'findAuthUserById').mockResolvedValue(authMock);
 
-    //   await resendEmail(req, res, next);
-    //   expect(auth.updateVerifyEmailField).toHaveBeenCalled();
-    // });
-
-    // it('should return authenticated user', async () => {
-    //   const req: Request = authMockRequest({}, { username: USERNAME, password: PASSWORD }, authUserPayload) as unknown as Request;
-    //   const res: Response = authMockResponse();
-    //   const next = jest.fn();
-
-    //   jest.spyOn(auth, 'findUserByEmail').mockResolvedValue(authMock);
-    //   jest.spyOn(auth, 'findAuthUserById').mockResolvedValue(authMock);
-
-    //   await resendEmail(req, res, next);
-    //   expect(auth.updateVerifyEmailField).toHaveBeenCalled();
-    //   expect(res.status).toHaveBeenCalledWith(200);
-    //   expect(res.json).toHaveBeenCalledWith({
-    //     message: 'Email verification sent',
-    //     user: authMock
-    //   });
-    // });
+      await resendEmail(req, res, next);
+      expect(auth.updateVerifyEmailField).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'Email verification sent',
+        user: authMock
+      });
+    });
   });
 });

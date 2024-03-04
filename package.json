@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dtlee2k1/jobber-shared": "^0.0.3",
+    "@dtlee2k1/jobber-shared": "^0.0.4",
     "@elastic/elasticsearch": "^8.12.2",
     "amqplib": "^0.10.3",
     "bcrypt": "^5.1.1",
