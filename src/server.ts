@@ -1,5 +1,6 @@
 import http from 'http';
 
+import 'express-async-errors';
 import { CustomError, IAuthPayload, IErrorResponse, verifyGatewayRequest, winstonLogger } from '@dtlee2k1/jobber-shared';
 import { Application, NextFunction, Request, Response, json, urlencoded } from 'express';
 import hpp from 'hpp';
@@ -8,13 +9,12 @@ import cors from 'cors';
 import { verify } from 'jsonwebtoken';
 import compression from 'compression';
 import { Channel } from 'amqplib';
-
-import envConfig from './config';
-import { checkConnection } from './elasticsearch';
-import { createConnection } from './queues/connection';
-import authRouter from './routes/auth.routes';
-import currentUserRouter from './routes/current-user.routes';
-import healthRouter from './routes/health.routes';
+import envConfig from '@auth/config';
+import { checkConnection } from '@auth/elasticsearch';
+import { createConnection } from '@auth/queues/connection';
+import authRouter from '@auth/routes/auth.routes';
+import currentUserRouter from '@auth/routes/current-user.routes';
+import healthRouter from '@auth/routes/health.routes';
 
 const SERVER_PORT = 4002;
 const logger = winstonLogger(`${envConfig.ELASTIC_SEARCH_URL}`, 'authServer', 'debug');

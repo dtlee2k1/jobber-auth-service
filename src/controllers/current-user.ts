@@ -29,7 +29,7 @@ export async function resendEmail(req: Request, res: Response, _next: NextFuncti
   const verificationLink = `${envConfig.CLIENT_URL}/confirm_email?v_token=${randomCharacters}`;
   await updateVerifyEmailField(parseInt(userId), 0, randomCharacters);
   const messageDetails: IEmailMessageDetails = {
-    receiverEmail: email.toLowerCase(),
+    receiverEmail: existingUser.email!.toLowerCase(),
     verifyLink: verificationLink,
     template: 'verifyEmail'
   };

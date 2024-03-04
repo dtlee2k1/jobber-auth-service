@@ -1,8 +1,7 @@
 import express from 'express';
-
-import { start } from './server';
-import { databaseConnection } from './database';
-import envConfig from './config';
+import { start } from '@auth/server';
+import { databaseConnection } from '@auth/database';
+import envConfig from '@auth/config';
 
 function init() {
   envConfig.cloudinaryConfig();

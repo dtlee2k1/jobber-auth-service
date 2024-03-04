@@ -88,4 +88,6 @@ AuthModel.prototype.hashPassword = async function (password: string) {
   return hash(password, SALT_ROUNDS);
 };
 
+AuthModel.sync({});
+
 export default AuthModel;

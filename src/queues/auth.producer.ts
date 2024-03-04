@@ -1,8 +1,7 @@
 import envConfig from '@auth/config';
 import { winstonLogger } from '@dtlee2k1/jobber-shared';
 import { Channel } from 'amqplib';
-
-import { createConnection } from './connection';
+import { createConnection } from '@auth/queues/connection';
 
 const logger = winstonLogger(`${envConfig.ELASTIC_SEARCH_URL}`, 'authProducer', 'debug');
 
