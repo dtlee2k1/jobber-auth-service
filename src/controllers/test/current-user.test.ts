@@ -1,14 +1,15 @@
 import * as auth from '@auth/services/auth.service'; // use to mock the specific methods that need in testing
-// import * as helper from '@dtlee2k1/jobber-shared';
 import { Request, Response } from 'express';
 import { getCurrentUser, resendEmail } from '@auth/controllers/current-user';
 import { authMock, authMockRequest, authMockResponse, authUserPayload } from '@auth/controllers/test/mocks/auth.mock';
 import { Sequelize } from 'sequelize';
+import { BadRequestError } from '@auth/error-handler';
 
 jest.mock('@auth/services/auth.service'); // Mocking complete service
 jest.mock('@dtlee2k1/jobber-shared');
 jest.mock('@auth/queues/auth.producer');
 jest.mock('@auth/routes/current-user.routes');
+jest.mock('@auth/error-handler');
 
 const USERNAME = 'TestUser';
 const PASSWORD = '12345678';
@@ -70,17 +71,17 @@ describe('CurrentUser', () => {
   });
 
   describe('resendEmail method', () => {
-    // it('should call BadRequestError for invalid email', async () => {
-    //   const req: Request = authMockRequest({}, { username: USERNAME, password: PASSWORD }, authUserPayload) as unknown as Request;
-    //   const res: Response = authMockResponse();
-    //   const next = jest.fn();
+    it('should call BadRequestError for invalid email', async () => {
+      const req: Request = authMockRequest({}, { username: USERNAME, password: PASSWORD }, authUserPayload) as unknown as Request;
+      const res: Response = authMockResponse();
+      const next = jest.fn();
 
-    //   jest.spyOn(auth, 'findUserByEmail').mockResolvedValue({} as never);
+      jest.spyOn(auth, 'findUserByEmail').mockResolvedValue(undefined);
 
-    //   resendEmail(req, res, next).catch(() => {
-    //     expect(helper.BadRequestError).toHaveBeenCalledWith('Email is invalid', 'CurrentUser resentEmail() method error');
-    //   });
-    // });
+      resendEmail(req, res, next).catch(() => {
+        expect(BadRequestError).toHaveBeenCalledWith('Email is invalid', 'CurrentUser resentEmail() method error');
+      });
+    });
 
     it('should call updateVerifyEmailField method', async () => {
       const req: Request = authMockRequest({}, { username: USERNAME, password: PASSWORD }, authUserPayload) as unknown as Request;

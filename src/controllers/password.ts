@@ -8,13 +8,14 @@ import {
   updatePassword,
   updatePasswordResetToken
 } from '@auth/services/auth.service';
-import { BadRequestError, IAuthDocument, IEmailMessageDetails } from '@dtlee2k1/jobber-shared';
+import { IAuthDocument, IEmailMessageDetails } from '@dtlee2k1/jobber-shared';
 import { NextFunction, Request, Response } from 'express';
 import envConfig from '@auth/config';
 import { publishDirectMessage } from '@auth/queues/auth.producer';
 import { authChannel } from '@auth/server';
 import { StatusCodes } from 'http-status-codes';
 import AuthModel from '@auth/models/auth.schema';
+import { BadRequestError } from '@auth/error-handler';
 
 export async function forgotPassword(req: Request, res: Response, _next: NextFunction) {
   const { error } = await Promise.resolve(emailSchema.validate(req.body));

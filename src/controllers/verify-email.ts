@@ -1,5 +1,6 @@
+import { BadRequestError } from '@auth/error-handler';
 import { findAuthUserById, findAuthUserByVerificationToken, updateVerifyEmailField } from '@auth/services/auth.service';
-import { BadRequestError, IAuthDocument } from '@dtlee2k1/jobber-shared';
+import { IAuthDocument } from '@dtlee2k1/jobber-shared';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 

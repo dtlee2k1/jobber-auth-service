@@ -1,7 +1,8 @@
 import AuthModel from '@auth/models/auth.schema';
+import { BadRequestError } from '@auth/error-handler';
 import { loginSchema } from '@auth/schemes/signin';
 import { findUserByEmail, findUserByUsername, signToken } from '@auth/services/auth.service';
-import { BadRequestError, IAuthDocument, isEmail } from '@dtlee2k1/jobber-shared';
+import { IAuthDocument, isEmail } from '@dtlee2k1/jobber-shared';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { omit } from 'lodash';

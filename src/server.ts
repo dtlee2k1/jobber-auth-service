@@ -1,7 +1,7 @@
 import http from 'http';
 
 import 'express-async-errors';
-import { CustomError, IAuthPayload, IErrorResponse, verifyGatewayRequest, winstonLogger } from '@dtlee2k1/jobber-shared';
+
 import { Application, NextFunction, Request, Response, json, urlencoded } from 'express';
 import hpp from 'hpp';
 import helmet from 'helmet';
@@ -15,6 +15,8 @@ import { createConnection } from '@auth/queues/connection';
 import authRouter from '@auth/routes/auth.routes';
 import currentUserRouter from '@auth/routes/current-user.routes';
 import healthRouter from '@auth/routes/health.routes';
+import { IAuthPayload, verifyGatewayRequest, winstonLogger } from '@dtlee2k1/jobber-shared';
+import { CustomError, IErrorResponse } from '@auth/error-handler';
 
 const SERVER_PORT = 4002;
 const logger = winstonLogger(`${envConfig.ELASTIC_SEARCH_URL}`, 'authServer', 'debug');

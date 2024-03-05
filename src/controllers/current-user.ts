@@ -1,7 +1,8 @@
 import crypto from 'crypto';
 
 import { findAuthUserById, findUserByEmail, updateVerifyEmailField } from '@auth/services/auth.service';
-import { BadRequestError, IAuthDocument, IEmailMessageDetails } from '@dtlee2k1/jobber-shared';
+import { IAuthDocument, IEmailMessageDetails } from '@dtlee2k1/jobber-shared';
+import { BadRequestError } from '@auth/error-handler';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import envConfig from '@auth/config';

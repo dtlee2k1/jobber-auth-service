@@ -2,7 +2,6 @@ import crypto from 'crypto';
 
 import { signupSchema } from '@auth/schemes/signup';
 import { createAuthUser, findUserByUsernameOrEmail, signToken } from '@auth/services/auth.service';
-import { BadRequestError, IAuthDocument, IEmailMessageDetails, uploadImages } from '@dtlee2k1/jobber-shared';
 import { UploadApiResponse } from 'cloudinary';
 import { NextFunction, Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,6 +9,8 @@ import { publishDirectMessage } from '@auth/queues/auth.producer';
 import { authChannel } from '@auth/server';
 import envConfig from '@auth/config';
 import { StatusCodes } from 'http-status-codes';
+import { IAuthDocument, IEmailMessageDetails, uploadImages } from '@dtlee2k1/jobber-shared';
+import { BadRequestError } from '@auth/error-handler';
 
 export async function signUp(req: Request, res: Response, _next: NextFunction) {
   const { error } = await Promise.resolve(signupSchema.validate(req.body));
