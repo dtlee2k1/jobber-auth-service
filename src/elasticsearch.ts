@@ -1,6 +1,7 @@
 import { winstonLogger } from '@dtlee2k1/jobber-shared';
 import { Client } from '@elastic/elasticsearch';
 import envConfig from '@auth/config';
+import { GetResponse } from '@elastic/elasticsearch/lib/api/types';
 
 const logger = winstonLogger(`${envConfig.ELASTIC_SEARCH_URL}`, 'authElasticSearchServer', 'debug');
 
@@ -44,4 +45,14 @@ async function createIndex(indexName: string) {
   }
 }
 
-export { elasticSearchClient, checkConnection, createIndex };
+async function getDocumentById(indexName: string, gigId: string) {
+  try {
+    const result: GetResponse = await elasticSearchClient.get({ index: indexName, id: gigId });
+    return result._source;
+  } catch (error) {
+    logger.log({ level: 'error', message: `AuthService elasticsearch getDocumentById() method error: ${error}` });
+    return {};
+  }
+}
+
+export { elasticSearchClient, checkConnection, createIndex, getDocumentById };
