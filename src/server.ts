@@ -10,7 +10,7 @@ import { verify } from 'jsonwebtoken';
 import compression from 'compression';
 import { Channel } from 'amqplib';
 import envConfig from '@auth/config';
-import { checkConnection } from '@auth/elasticsearch';
+import { checkConnection, createIndex } from '@auth/elasticsearch';
 import { createConnection } from '@auth/queues/connection';
 import authRouter from '@auth/routes/auth.routes';
 import currentUserRouter from '@auth/routes/current-user.routes';
@@ -73,6 +73,7 @@ async function startQueues() {
 
 async function startElasticSearch() {
   await checkConnection();
+  await createIndex('gigs');
 }
 
 function errorHandler(app: Application) {
