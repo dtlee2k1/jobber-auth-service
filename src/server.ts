@@ -17,6 +17,7 @@ import currentUserRouter from '@auth/routes/current-user.routes';
 import healthRouter from '@auth/routes/health.routes';
 import { IAuthPayload, verifyGatewayRequest, winstonLogger } from '@dtlee2k1/jobber-shared';
 import { CustomError, IErrorResponse } from '@auth/error-handler';
+import searchRouter from '@auth/routes/search.routes';
 
 const SERVER_PORT = 4002;
 const logger = winstonLogger(`${envConfig.ELASTIC_SEARCH_URL}`, 'authServer', 'debug');
@@ -65,6 +66,8 @@ function routesMiddleware(app: Application) {
   const BASE_PATH = '/api/v1/auth';
 
   app.use(healthRouter);
+  app.use(BASE_PATH, searchRouter);
+
   app.use(BASE_PATH, verifyGatewayRequest, authRouter);
   app.use(BASE_PATH, verifyGatewayRequest, currentUserRouter);
 }

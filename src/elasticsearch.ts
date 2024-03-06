@@ -1,4 +1,4 @@
-import { winstonLogger } from '@dtlee2k1/jobber-shared';
+import { ISellerGig, winstonLogger } from '@dtlee2k1/jobber-shared';
 import { Client } from '@elastic/elasticsearch';
 import envConfig from '@auth/config';
 import { GetResponse } from '@elastic/elasticsearch/lib/api/types';
@@ -45,13 +45,13 @@ async function createIndex(indexName: string) {
   }
 }
 
-async function getDocumentById(indexName: string, gigId: string) {
+async function getDocumentById(indexName: string, gigId: string): Promise<ISellerGig> {
   try {
     const result: GetResponse = await elasticSearchClient.get({ index: indexName, id: gigId });
-    return result._source;
+    return result._source as ISellerGig;
   } catch (error) {
     logger.log({ level: 'error', message: `AuthService elasticsearch getDocumentById() method error: ${error}` });
-    return {};
+    return {} as ISellerGig;
   }
 }
 
