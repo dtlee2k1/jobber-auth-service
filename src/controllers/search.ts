@@ -1,4 +1,4 @@
-import { getSingeGig, gigsSearch } from '@auth/services/elasticsearch.service';
+import { getSingeGig, gigsSearch } from '@auth/services/search.service';
 import { IPaginateProps, ISearchResult, ISellerGig } from '@dtlee2k1/jobber-shared';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -7,7 +7,7 @@ import { sortBy } from 'lodash';
 export async function searchGigs(req: Request, res: Response, _next: NextFunction) {
   const { from, size, type } = req.params;
 
-  let resultHits: unknown[] = [];
+  let resultHits: ISellerGig[] = [];
   const paginate: IPaginateProps = { from, size: parseInt(size), type };
 
   const gigs: ISearchResult = await gigsSearch(
@@ -19,7 +19,7 @@ export async function searchGigs(req: Request, res: Response, _next: NextFunctio
   );
 
   for (const gig of gigs.hits) {
-    resultHits.push(gig._source);
+    resultHits.push(gig._source as ISellerGig);
   }
 
   if (type === 'backward') {

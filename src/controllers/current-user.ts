@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 
 import { findAuthUserById, findUserByEmail, updateVerifyEmailField } from '@auth/services/auth.service';
-import { IAuthDocument, IEmailMessageDetails } from '@dtlee2k1/jobber-shared';
+import { IAuthDocument, IEmailMessageDetails, lowerCase } from '@dtlee2k1/jobber-shared';
 import { BadRequestError } from '@auth/error-handler';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -30,7 +30,7 @@ export async function resendEmail(req: Request, res: Response, _next: NextFuncti
   const verificationLink = `${envConfig.CLIENT_URL}/confirm_email?v_token=${randomCharacters}`;
   await updateVerifyEmailField(parseInt(userId), 0, randomCharacters);
   const messageDetails: IEmailMessageDetails = {
-    receiverEmail: existingUser.email!.toLowerCase(),
+    receiverEmail: lowerCase(email),
     verifyLink: verificationLink,
     template: 'verifyEmail'
   };
@@ -39,7 +39,7 @@ export async function resendEmail(req: Request, res: Response, _next: NextFuncti
     'jobber-email-notification',
     'auth-email',
     JSON.stringify(messageDetails),
-    'Verify email message has been sent to notification service.'
+    'Verify email message has been sent to notification service'
   );
   const updatedUser: IAuthDocument = (await findAuthUserById(parseInt(userId))) as IAuthDocument;
   res.status(StatusCodes.OK).json({ message: 'Email verification sent', user: updatedUser });

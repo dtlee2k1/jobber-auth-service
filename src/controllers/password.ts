@@ -80,6 +80,7 @@ export async function resetPassword(req: Request, res: Response, _next: NextFunc
   await updatePassword(existingUser.id!, hashedPassword);
 
   const messageDetails: IEmailMessageDetails = {
+    receiverEmail: existingUser.email,
     username: existingUser.username,
     template: 'resetPasswordSuccess'
   };
@@ -117,6 +118,7 @@ export async function changePassword(req: Request, res: Response, _next: NextFun
   await updatePassword(existingUser.id!, hashedPassword);
 
   const messageDetails: IEmailMessageDetails = {
+    receiverEmail: existingUser.email,
     username: existingUser.username,
     template: 'resetPasswordSuccess'
   };

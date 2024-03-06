@@ -18,6 +18,7 @@ import healthRouter from '@auth/routes/health.routes';
 import { IAuthPayload, verifyGatewayRequest, winstonLogger } from '@dtlee2k1/jobber-shared';
 import { CustomError, IErrorResponse } from '@auth/error-handler';
 import searchRouter from '@auth/routes/search.routes';
+import seedRouter from '@auth/routes/seed.routes';
 
 const SERVER_PORT = 4002;
 const logger = winstonLogger(`${envConfig.ELASTIC_SEARCH_URL}`, 'authServer', 'debug');
@@ -67,6 +68,7 @@ function routesMiddleware(app: Application) {
 
   app.use(healthRouter);
   app.use(BASE_PATH, searchRouter);
+  app.use(BASE_PATH, seedRouter);
 
   app.use(BASE_PATH, verifyGatewayRequest, authRouter);
   app.use(BASE_PATH, verifyGatewayRequest, currentUserRouter);
@@ -95,14 +97,6 @@ function errorHandler(app: Application) {
 function startServer(app: Application) {
   try {
     const httpServer = new http.Server(app);
-    startHttpServer(httpServer);
-  } catch (error) {
-    logger.log('error', 'AuthService startServer() error method:', error);
-  }
-}
-
-async function startHttpServer(httpServer: http.Server) {
-  try {
     logger.info(`Auth server has started with process id ${process.pid}`);
     httpServer.listen(SERVER_PORT, () => {
       logger.info(`Auth server running on port ${SERVER_PORT}`);

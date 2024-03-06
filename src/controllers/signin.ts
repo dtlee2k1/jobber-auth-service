@@ -7,10 +7,10 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { omit } from 'lodash';
 
-export async function login(req: Request, res: Response, _next: NextFunction) {
+export async function SignIn(req: Request, res: Response, _next: NextFunction) {
   const { error } = await Promise.resolve(loginSchema.validate(req.body));
   if (error?.details) {
-    throw new BadRequestError(error.details[0].message, 'Signin login() method error');
+    throw new BadRequestError(error.details[0].message, 'Signin SignIn() method error');
   }
 
   const { username, password } = req.body;
@@ -18,12 +18,12 @@ export async function login(req: Request, res: Response, _next: NextFunction) {
   const isValidEmail = isEmail(username);
   const existingUser: IAuthDocument | undefined = isValidEmail ? await findUserByEmail(username) : await findUserByUsername(username);
   if (!existingUser) {
-    throw new BadRequestError('Invalid credentials', 'Signin login() method error');
+    throw new BadRequestError('Invalid credentials', 'Signin SignIn() method error');
   }
 
   const isMatchPasswords: boolean = await AuthModel.prototype.comparePassword(password, existingUser.password);
   if (!isMatchPasswords) {
-    throw new BadRequestError('Invalid credentials', 'Signin login() method error');
+    throw new BadRequestError('Invalid credentials', 'Signin SignIn() method error');
   }
 
   const userJWT = signToken(existingUser.id!, existingUser.email!, existingUser.username!);
