@@ -36,7 +36,7 @@ export async function resendEmail(req: Request, res: Response, _next: NextFuncti
   };
   await publishDirectMessage(
     authChannel,
-    'jobber-email-notification',
+    'jobber-auth-notification',
     'auth-email',
     JSON.stringify(messageDetails),
     'Verify email message has been sent to notification service'
