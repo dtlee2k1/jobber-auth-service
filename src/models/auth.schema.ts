@@ -5,9 +5,16 @@ import { DataTypes, Model, ModelDefined, Optional } from 'sequelize';
 
 const SALT_ROUNDS = 10;
 
+interface AuthModelInstanceMethods extends Model {
+  prototype: {
+    comparePassword: (password: string, hashedPassword: string) => Promise<boolean>;
+    hashPassword: (password: string) => Promise<string>;
+  };
+}
+
 type UserCreationAttributes = Optional<IAuthDocument, 'id' | 'createdAt' | 'passwordResetToken' | 'passwordResetExpires'>;
 
-const AuthModel: ModelDefined<IAuthDocument, UserCreationAttributes> = sequelize.define(
+const AuthModel: ModelDefined<IAuthDocument, UserCreationAttributes> & AuthModelInstanceMethods = sequelize.define(
   'Auth',
   {
     username: {
@@ -73,7 +80,7 @@ const AuthModel: ModelDefined<IAuthDocument, UserCreationAttributes> = sequelize
       }
     ]
   }
-);
+) as ModelDefined<IAuthDocument, UserCreationAttributes> & AuthModelInstanceMethods;
 
 AuthModel.beforeCreate(async (auth: Model<IAuthDocument, UserCreationAttributes>) => {
   const hashedPassword = await hash(auth.dataValues.password as string, SALT_ROUNDS);

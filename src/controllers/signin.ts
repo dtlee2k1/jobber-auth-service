@@ -21,7 +21,7 @@ export async function SignIn(req: Request, res: Response, _next: NextFunction) {
     throw new BadRequestError('Invalid credentials', 'Signin SignIn() method error');
   }
 
-  const isMatchPasswords: boolean = await AuthModel.prototype.comparePassword(password, existingUser.password);
+  const isMatchPasswords: boolean = await AuthModel.prototype.comparePassword(password, existingUser.password!);
   if (!isMatchPasswords) {
     throw new BadRequestError('Invalid credentials', 'Signin SignIn() method error');
   }

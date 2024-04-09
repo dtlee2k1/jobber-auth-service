@@ -109,7 +109,7 @@ export async function changePassword(req: Request, res: Response, _next: NextFun
     throw new BadRequestError('Invalid credentials', 'Password resetPassword() method error');
   }
 
-  const isMatchPassword = await AuthModel.prototype.comparePassword(currentPassword, existingUser?.password);
+  const isMatchPassword = await AuthModel.prototype.comparePassword(currentPassword, existingUser.password!);
   if (!isMatchPassword) {
     throw new BadRequestError('Invalid password', 'Password resetPassword() method error');
   }
