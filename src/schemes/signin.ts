@@ -19,7 +19,9 @@ const loginSchema: ObjectSchema = Joi.object().keys({
     'string.min': 'Password length must be from 6 to 32 characters',
     'string.max': 'Password length must be from 6 to 32 characters',
     'string.empty': 'Password is a required field'
-  })
+  }),
+  browserName: Joi.string().optional().empty(''),
+  deviceType: Joi.string().optional().empty('')
 });
 
 export { loginSchema };

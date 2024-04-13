@@ -104,7 +104,7 @@ export async function findAuthUserByPasswordToken(token: string) {
   return user?.dataValues;
 }
 
-export async function updateVerifyEmailField(authId: number, emailVerified: number, emailVerificationToken: string) {
+export async function updateVerifyEmailField(authId: number, emailVerified: number, emailVerificationToken: string | null) {
   await AuthModel.update(
     {
       emailVerified,
@@ -128,7 +128,7 @@ export async function updatePassword(authId: number, password: string) {
   await AuthModel.update(
     {
       password,
-      passwordResetToken: '',
+      passwordResetToken: null,
       passwordResetExpires: new Date()
     },
     { where: { id: authId } }

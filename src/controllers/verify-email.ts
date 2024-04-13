@@ -12,7 +12,7 @@ export async function updateVerifyToken(req: Request, res: Response, _next: Next
     throw new BadRequestError('Verification token is either invalid or is already used', 'VerifyEmail updateVerifyToken() method error');
   }
   // Verify user
-  await updateVerifyEmailField(existingUser.id!, 1, '');
+  await updateVerifyEmailField(existingUser.id!, 1, null);
 
   const updatedUser: IAuthDocument = (await findAuthUserById(existingUser.id!)) as IAuthDocument;
   res.status(StatusCodes.OK).json({

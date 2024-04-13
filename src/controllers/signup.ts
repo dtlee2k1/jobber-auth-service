@@ -45,7 +45,7 @@ export async function signUp(req: Request, res: Response, _next: NextFunction) {
 
   const result = await createAuthUser(authData);
 
-  const verifyLink = `${envConfig.CLIENT_URL}/confirm_email/v_token=${authData.emailVerificationToken}`;
+  const verifyLink = `${envConfig.CLIENT_URL}/confirm_email?v_token=${authData.emailVerificationToken}`;
   const messageDetails: IEmailMessageDetails = {
     receiverEmail: result.email,
     verifyLink,

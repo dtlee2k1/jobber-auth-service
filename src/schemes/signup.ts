@@ -30,7 +30,9 @@ const signupSchema: ObjectSchema = Joi.object().keys({
     'string.base': 'Please add a profile picture',
     'string.empty': 'Profile picture is required',
     'any.required': 'Profile picture is required'
-  })
+  }),
+  browserName: Joi.string().optional().empty(''),
+  deviceType: Joi.string().optional().empty('')
 });
 
 export { signupSchema };
