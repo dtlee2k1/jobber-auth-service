@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-import { emailSchema, passwordSchema } from '@auth/schemes/password';
+import { changePasswordSchema, emailSchema, passwordSchema } from '@auth/schemes/password';
 import {
   findAuthUserByPasswordToken,
   findUserByEmail,
@@ -97,7 +97,7 @@ export async function resetPassword(req: Request, res: Response, _next: NextFunc
 }
 
 export async function changePassword(req: Request, res: Response, _next: NextFunction) {
-  const { error } = await Promise.resolve(passwordSchema.validate(req.body));
+  const { error } = await Promise.resolve(changePasswordSchema.validate(req.body));
   if (error?.details) {
     throw new BadRequestError(error.details[0].message, 'Password changePassword() method error');
   }
@@ -111,7 +111,7 @@ export async function changePassword(req: Request, res: Response, _next: NextFun
 
   const isMatchPassword = await AuthModel.prototype.comparePassword(currentPassword, existingUser.password!);
   if (!isMatchPassword) {
-    throw new BadRequestError('Invalid password', 'Password resetPassword() method error');
+    throw new BadRequestError('Current password is incorrect', 'Password resetPassword() method error');
   }
 
   const hashedPassword = await AuthModel.prototype.hashPassword(newPassword);

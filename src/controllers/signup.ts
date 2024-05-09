@@ -9,7 +9,7 @@ import { publishDirectMessage } from '@auth/queues/auth.producer';
 import { authChannel } from '@auth/server';
 import envConfig from '@auth/config';
 import { StatusCodes } from 'http-status-codes';
-import { IAuthDocument, IEmailMessageDetails, uploadImages } from '@dtlee2k1/jobber-shared';
+import { IAuthDocument, IEmailMessageDetails, firstLetterUppercase, uploadImages } from '@dtlee2k1/jobber-shared';
 import { BadRequestError } from '@auth/error-handler';
 
 export async function signUp(req: Request, res: Response, _next: NextFunction) {
@@ -19,7 +19,8 @@ export async function signUp(req: Request, res: Response, _next: NextFunction) {
   }
 
   const { username, email, password, country, profilePicture } = req.body;
-  const checkIfUserExist = await findUserByUsernameOrEmail(username, email);
+
+  const checkIfUserExist = await findUserByUsernameOrEmail(firstLetterUppercase(username), email);
   if (checkIfUserExist) {
     throw new BadRequestError('Invalid credentials. Email or Username', 'Signup signUp() method error');
   }
@@ -34,7 +35,7 @@ export async function signUp(req: Request, res: Response, _next: NextFunction) {
   const randomBytes: Buffer = await Promise.resolve(crypto.randomBytes(20));
   const randomCharacters = randomBytes.toString('hex');
   const authData: IAuthDocument = {
-    username,
+    username: firstLetterUppercase(username),
     email,
     password,
     country,
